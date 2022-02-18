@@ -1,9 +1,3 @@
-<p>
-  <a herf="http://www.djangoproject.com/" target="_blank" alt="Django Official Website">
-    <img src="https://static.djangoproject.com/img/logo-django.42234b631760.svg" style="width: 320; background: #0C4B33" />
-  </a>
-</p>
-
 # `Guide`
 
 Initial Project
