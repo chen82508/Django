@@ -16,6 +16,7 @@ Initial Project
 > The packages should be installed
 > - django
 > - djangorestframework
+> - djangorestframework-simplejwt
 > - mysqlclient
 > - python-decouple
 > ```sh
