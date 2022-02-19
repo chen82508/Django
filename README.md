@@ -3,7 +3,8 @@
 Initial Project
 ---
 > ### 1. Install Virtual Environment
-> Install venv under root directory.
+> Install venv under root directory.  
+> `Please use python 3.10 or later version.`
 > ```sh
 > python -m venv venv
 > ```
