@@ -1,11 +1,13 @@
 from .models import User
-from .serializers import RegisterSerializers
+from .serializers import RegisterSerializer, EmailVerificationSerializer
 from .utils import Util
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render
 from django.urls import reverse
-from rest_framework import generics, status
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import (generics, status, views)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
@@ -13,15 +15,15 @@ import jwt
 
 # Create your views here.
 class RegisterView(generics.GenericAPIView):
-    serializer_class = RegisterSerializers
+    serializer_class = RegisterSerializer
 
     def post(self, request):
         user = request.data
-        serializers = self.serializer_class(data=user)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        user_data = serializers.data
+        user_data = serializer.data
 
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
@@ -39,25 +41,26 @@ class RegisterView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class VerifyEmail(generics.GenericAPIView):
+class VerifyEmail(views.APIView):
+    serializer_class = EmailVerificationSerializer
 
+    token_param_config = openapi.Parameter(
+        'token', in_=openapi.IN_QUERY, description='Decription', type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
         token = request.GET.get('token')
         try:
-            payload = jwt.decode(token,
-                                 settings.SECRET_KEY,
-                                 algorithms=['HS256'])
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=['HS256'])
             user = User.objects.get(id=payload['user_id'])
 
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
 
-            return Response({"email": "Successfully activated."},
-                            status=status.HTTP_200_OK)
+            return Response({"email": "Successfully activated."}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
-            return Response({"error": "Activation expired."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Activation expired."}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
-            return Response({"error": "Invalid token."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
