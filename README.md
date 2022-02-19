@@ -13,15 +13,10 @@ Initial Project
 > ```sh
 > venv\Scripts\activate
 > ```
-> ### 3. Install packages
-> The packages should be installed
-> - django
-> - djangorestframework
-> - djangorestframework-simplejwt
-> - mysqlclient
-> - python-decouple
+> ### 3. Install the Dependencies
+> All dependencies are list in requirements.txt. You just need to run the following command.
 > ```sh
-> pip install <package_1> <package_2> ...
+> pip install -r requirements.txt
 > ```
 > ### 4. Create Environment File
 > Create .env file under ./djangoApiDemo
