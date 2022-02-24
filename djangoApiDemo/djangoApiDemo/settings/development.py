@@ -1,4 +1,5 @@
 from djangoApiDemo.settings.base import *
+from decouple import config
 
 SECRET_KEY = config('SECRET_KEY', 'default-django-secret-key')
 
@@ -19,12 +20,6 @@ DATABASES = {
     # }
 }
 
-INSTALLED_APPS += [
-    'drf_yasg',
-    'authentication',
-    'expenses',
-]
-
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
@@ -40,12 +35,3 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
-REST_FRAMEWORK.update({
-    'DEFAULT_AUTHENTICATION_CLASSES':
-    ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
-})
-
-AUTH_USER_MODEL = 'authentication.User'
