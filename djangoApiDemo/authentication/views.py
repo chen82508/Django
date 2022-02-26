@@ -1,4 +1,5 @@
 from .models import User
+from .renderers import UserRenderer
 from .serializers import LoginSerializer, RegisterSerializer, EmailVerificationSerializer
 from .utils import Util
 from django.conf import settings
@@ -16,6 +17,7 @@ import jwt
 # Create your views here.
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    renderer_classes = (UserRenderer,)
 
     def post(self, request):
         user = request.data
