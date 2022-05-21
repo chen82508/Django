@@ -16,8 +16,8 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
       - run:
-          name: Run tests
           command: ./djangoApiDemo/manage.py test
+          name: Run tests
 
 workflows:
   main:
